@@ -2,10 +2,10 @@
 
 This is a simple python implementation of the PLA-based streaming compressor techniques that are presented in:
 
-- Havers, B., Duvignau, R., Najdataei, H., Gulisano, V., Papatriantafilou, M., & Koppisetty, A. C. (2020). DRIVEN: A framework for efficient Data Retrieval and clustering in Vehicular Networks. Future Generation Computer Systems, 107, 1-17.
-- Havers, B., Duvignau, R., Najdataei, H., Gulisano, V., Koppisetty, A. C., & Papatriantafilou, M. (2019, April). Driven: a framework for efficient data retrieval and clustering in vehicular networks. In 2019 IEEE 35th International Conference on Data Engineering (ICDE) (pp. 1850-1861). IEEE.
-- Duvignau, R., Gulisano, V., Papatriantafilou, M., & Savic, V. (2019, April). Streaming piecewise linear approximation for efficient data management in edge computing. In Proceedings of the 34th ACM/SIGAPP symposium on applied computing (pp. 593-596).
-- Duvignau, R., Gulisano, V., Papatriantafilou, M., & Savic, V. (2018). Piecewise linear approximation in data streaming: Algorithmic implementations and experimental analysis. arXiv preprint arXiv:1808.08877.
+- \[1\] Havers, B., Duvignau, R., Najdataei, H., Gulisano, V., Papatriantafilou, M., & Koppisetty, A. C. (2020). DRIVEN: A framework for efficient Data Retrieval and clustering in Vehicular Networks. Future Generation Computer Systems, 107, 1-17.
+- \[2\] Havers, B., Duvignau, R., Najdataei, H., Gulisano, V., Koppisetty, A. C., & Papatriantafilou, M. (2019, April). Driven: a framework for efficient data retrieval and clustering in vehicular networks. In 2019 IEEE 35th International Conference on Data Engineering (ICDE) (pp. 1850-1861). IEEE.
+- \[3\] Duvignau, R., Gulisano, V., Papatriantafilou, M., & Savic, V. (2019, April). Streaming piecewise linear approximation for efficient data management in edge computing. In Proceedings of the 34th ACM/SIGAPP symposium on applied computing (pp. 593-596).
+- \[4\] Duvignau, R., Gulisano, V., Papatriantafilou, M., & Savic, V. (2018). Piecewise linear approximation in data streaming: Algorithmic implementations and experimental analysis. arXiv preprint arXiv:1808.08877.
 
 ## Usage
 
@@ -67,9 +67,9 @@ After downloading the source code, simply execute `run_tests.sh` for running a f
 
 The input format is **csv files** (the separator can be specified with the `-s` flag). 
 
-By default, the first column is used as timestamps and the compressor runs over each column where an error is specified, e.g. `python3 convexhull.py -1 0.1 0.2` will use the first column as timestamps but do not attempt to compress it, the second column will be compressed with a max error of `0.1` and the third column with a max error of `0.2`.
+By default, the first column is used as timestamps and the compressor runs over each column where an error is specified, e.g. `python3 convexhull.py -1 0.1 0.2` will use the first column as timestamps but do not attempt to compress it (since the chosen error is negative), the second column will be compressed with a max error of `0.1` and the third column with a max error of `0.2`.
 
-To use logical timestamps (i.e. 1,2,3 etc), use flag `-l`.
+To use logical timestamps (such that every column, including the timestamps column itself, is compressed against a counter, making compression and decompression decoupled from the timestamps column; see \[1\]), use flag `-l`.
 
 The programs can also run over directories and will perform the compression on each file in the specified directory.
 
@@ -81,9 +81,9 @@ The programs can also run over directories and will perform the compression on e
 
 `-t` allows to set the input size of data values (default is 8 bytes or *double* precision). This influences compression ratios.
 
-`-o` allows to set the output size for segments' parameters (alpha/beta). This influences compression ratios.
+`-o` allows to set the output size for segments' parameters (alpha/beta, meaning slope and y-intercept of the segment). This influences compression ratios.
 
-**To produce pla segment records, use `-x` flag.** The output depends on the set outputting protocol.
+**To output pla segment records, use the `-x` flag.** The output depends on the chosen outputting protocol.
 
 `-n` is *not implemented*.
 
