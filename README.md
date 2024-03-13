@@ -11,11 +11,11 @@ This is a simple python implementation of the PLA-based streaming compressor tec
 
 The code contains 3 compressors:
 
-- **Angle** `angle.py`: simple angular compressor (a variant of "SwingFilter")
-- **Convex-Hull** `convexhull.py`: optimal disjoint compressor (a variant of "SlideFilter")
-- **Linear** `linear.py`: maitains a bestfit line through datapoints and uses convexhulls for quickly testing if the line breaks the error
+- **Angle** `angle.py`: simple angular compressor (a variant of "SwingFilter", see \[4\])
+- **Convex-Hull** `convexhull.py`: optimal disjoint compressor (a variant of "SlideFilter", see \[4\])
+- **Linear** `linear.py`: maintains a best-fit line through datapoints and uses convex hulls for quickly testing if the line breaks the error
 
-The three programs use the same user interface. Simply run `python3 convexhull.py -h` to display a simple help:
+The three programs use the same user interface. Simply run `python3 [angle|convexhull|linear].py -h` to display a simple help:
 
 ```
 usage: convexhull.py [-h] [-c] [-e] [-Q] [-m] [-d] [-i] [-I | -II | -III] [-b BND] [-t INPUTSIZE] [-o OUTPUTSIZE] [-S]
