@@ -78,7 +78,7 @@ int main(int argc, char** argv){
             }
         }
         
-        fflush(stdout);
+        fflush(stdout);                                         // flush standard output
     }
     
     return EXIT_SUCCESS;

@@ -214,6 +214,8 @@ int main(int argc, char** argv){
                 break;
             }
         }
+        
+        fflush(stdout);                 // flush standard output
     }
     
     // End of input stream => flush current segment

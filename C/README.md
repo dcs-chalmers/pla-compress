@@ -21,6 +21,22 @@ If the full file is stored on disk, then one can use the following command to ge
 cat binary_file.bin | ./linear-pla error_bound > ouput_pla.pla
 ```
 
+If the input is stored in a *single-column* (default) or *single-row* CSV/TSV format, the small util `csv2bin` can be used to stream the input to the PLA compressor, eg:
+
+```
+cat single_column_file.csv | ./csv2bin | ./linear-pla error_bound > ouput_pla.pla
+```
+
+```
+cat csv_row_file.csv | ./csv2bin ',' | ./linear-pla error_bound > ouput_pla.pla
+```
+
+```
+cat tsv_row_file.tsv | ./csv2bin '\t' | ./linear-pla error_bound > ouput_pla.pla
+```
+
+The following pipeline should have no problem to handle about **1M datapoints per second** on any recent laptop with the data stored on a local SSD.
+
 ### Example of usage receiving the input from the network
 
 Since the program is conceived from the start to work in a streaming fashion, it can by default receives its input from eg a TCP socket, eg:
@@ -93,7 +109,7 @@ du -b example_data/*.bin example_data/*.pla
 
 ## Demo streaming usage
 
-To illustrate the streaming usage, we can use the basic script `csv2socket.py` in `example_data`. The script simulates that the data is read by eg a sensor at a rate of 10k values per second. 
+To illustrate the streaming usage, we can use the basic script `csv2socket.py` in `example_data`. The script simulates that the data is produced by eg a sensor at a rate of 200 values per second and the output is produced **as soon as ready**.
 
 1. Run the generator program (which assumes the input csvfile is available, by default *cricket.csv*):<br />
 ```
@@ -101,5 +117,9 @@ cd example_data; python3 csv2socket.py; cd .. &
 ```
 2. Read data from the generator socket and outputs segment informations only via `pla-decompress`:<br />
 ```
-nc locahost 12345 | ./linear-pla 1 | ./pla-decompress 4
+nc 127.0.0.1 12345 | ./linear-pla 1 | ./pla-decompress 4
 ```
+
+## Demo large datafile
+
+
