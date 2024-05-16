@@ -60,7 +60,7 @@ int main(int argc, char** argv){
                 printf("%f\n", a);
             if(mode == 1 || mode == 3)
                 fwrite(&a, sizeof(a), 1, stdout);               // uncomment for binary output
-            
+                
             x++;
         } 
         else{
@@ -68,8 +68,8 @@ int main(int argc, char** argv){
             if(mode >= 2)
                 printf("%d <%d,%f,%f>\n", x, n, a, b);          // print segment
                 
-            for(int i=0; i<n; i++){
-                value = a*x+b;
+            for(int i=1; i<n+1; i++){
+                value = a*i+b;
                 if(mode == 0 || mode == 2)
                     printf("%f\n", value);
                 if(mode == 1 || mode == 3)

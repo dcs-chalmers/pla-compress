@@ -27,3 +27,9 @@ with open("cricket.csv", 'w') as outputfile:
             if len(value) < 4:
                 break
             print(round(struct.unpack("f", value)[0],8), file=outputfile)
+
+#5) for completeness, compute the timestamps
+
+with open("cricket.ts.csv", 'w') as outputfile:
+    for t in range(len(data)):
+        print(t, file=outputfile)

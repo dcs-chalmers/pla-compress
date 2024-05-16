@@ -40,7 +40,7 @@
 #define VTYPE               float           // type for time series values and (a,b) ouput coefficients
 #define VTYPE2              double          // type for sum calculations on the values
 #define SINGLETONS          1               // boolean to deactivate singleton output
-#define DELTA               0.0000001       // floating point error extra tolerence
+#define DELTA               0.000001        // floating point error extra tolerence
 
 /* convex hulls */
 
@@ -109,6 +109,7 @@ int main(int argc, char** argv){
         a = coeff_a(x0, y0, x1, y1);
         b = coeff_b(x0, y0, x1, y1);
         
+        /* Initialize the convex hulls */
         upper_hull[0] = y0+error;
         uhull_x[0] = x0;
         upper_hull[1] = y1+error;
@@ -120,6 +121,7 @@ int main(int argc, char** argv){
         uhp = 2;
         lhp = 2;
         
+        x = 2;
         n = 2;
         y = NAN;
         
@@ -127,18 +129,21 @@ int main(int argc, char** argv){
         while(fread(&value, sizeof(value), 1, stdin) == 1 && value != NAN){   // stops upon EOF or an NAN
             x += 1;
             y = value;
+            n += 1;
+            
+            if(x >= N_MAX)
+                break;
             
             // Check if (x,y) is within the limit slopes: terminate line ?
             sumx += x;
             sumy += y;
             sumx2 += x*x;
             sumxy += x*y;
-            n += 1;
             
             newa = (n*sumxy-sumx*sumy) / (n*sumx2-sumx*sumx);
             newb = (sumy-newa*sumx) / n;
 
-            if(n >= N_MAX || (x*newa+newb < y-error-DELTA) || (x*newa+newb > y+error+DELTA)) 
+            if( (x*newa+newb < y-error-DELTA) || (x*newa+newb > y+error+DELTA) ) 
                 break;
             
             // Linear checking of the convex hulls
@@ -182,6 +187,9 @@ int main(int argc, char** argv){
             // Update current best fit line
             a = newa;
             b = newb;
+            
+            if(n == 0)
+                printf("\n %d, %d, %f, %f \n",x,n,a,b);
         }
         
         // End of input stream (EOF or a NAN value was received) => flush current segment
@@ -190,29 +198,32 @@ int main(int argc, char** argv){
         
         // End of current segment
         n -= 1;
+        x = 2;                      // reset logical timestamps
+        
+        if (n == 1)                 // 2 last datapoints reached stop here and clean up after
+            break;
         
         if(SINGLETONS && n == 2){       // flush 1 isolated point
             fwrite(&singleton, sizeof(singleton), 1, stdout);
             fwrite(&y0, sizeof(y0), 1, stdout);
 
-            x0 = x1;      y0 = y1;
-            x1 = x;       y1 = y;
+            x0 = 1;      y0 = y1;       
+            x1 = 2;      y1 = y;
         }
-        else{                           // flush one segment
+        else {               // flush one segment
             fwrite(&n, sizeof(n), 1, stdout);
             fwrite(&a, sizeof(a), 1, stdout);
             fwrite(&b, sizeof(b), 1, stdout);
             
-            x0 = x;     y0 = y;
+            x0 = 1;                     // reset logical timestamps     
+            x1 = -1;
+            y0 = y;
 
             if(fread(&value, sizeof(value), 1, stdin) == 1 && value != NAN){
-                x += 1;
-                x1 = x;     y1 = value;
+                x1 = 2;     y1 = value;
             }
-            else{
-                x1 = -1;
+            else
                 break;
-            }
         }
         
         fflush(stdout);                 // flush standard output
@@ -220,9 +231,15 @@ int main(int argc, char** argv){
     
     // End of input stream => flush current segment
     if(x0 != -1){
-        if(x1 == -1 || x1 < x0){
+        if(x1 == -1){
             fwrite(&singleton, sizeof(singleton), 1, stdout);
             fwrite(&y0, sizeof(y0), 1, stdout);
+        }
+        else if (n == 1){               // 2 last datapoints
+            fwrite(&singleton, sizeof(singleton), 1, stdout);
+            fwrite(&y0, sizeof(y0), 1, stdout);
+            fwrite(&singleton, sizeof(singleton), 1, stdout);
+            fwrite(&y1, sizeof(y1), 1, stdout);
         }
         else{
             fwrite(&n, sizeof(n), 1, stdout);
