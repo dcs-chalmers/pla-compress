@@ -116,7 +116,7 @@ Following the above pipeline for different error bounds make you appreciate the 
 | 1.15  | 249562 | 52.97 | 18.57 | 0.2721 |
 | 1.238 | 140275 | 57.09 | 20.02 | 0.2883 |
 
-(**NB*:** *The compresssion ratio depends if the input is the original 8009050-bytes CSV/TSV file or a single precision floating binary dump of 2808000 bytes. If the input data was originally stored using double precision, one needs to double the compression ratio obtained with binary float values. Note that the logical timestamps used by the compression technique do not need to be stored.*)
+(**NB*:** *The compresssion ratio depends if the input is the original 8009050-bytes CSV/TSV file or a single precision floating binary dump of 2808000 bytes. If the input data was originally stored using double precision, the compression ratio is roughly the double of the one obtained with binary float values. Note that the logical timestamps used by the compression technique do not need to be stored.*)
 
 The number of segment/singletons can also be easily accessed:
 
@@ -139,7 +139,7 @@ nc 127.0.0.1 12345 | ./linear-pla 1 | ./pla-decompress 4
 
 ## Demo large datafile
 
-Let us also demonstrate here the performance of the compression technique on a larger data input in the example_datset folder:
+Let us also demonstrate here the performance of the compression technique on a larger data input in the example_dataset folder:
 
 ```
 cd example_data/
@@ -159,7 +159,7 @@ cut -d, -f1 beijing.csv > beijing_ts.csv; cut -d, -f2 beijing.csv > beijing_x.cs
 9. Test the PLA-compression on each file, eg: <br>
 ```cat example_data/beijing_ts.csv | ./csv2bin | ./linear-pla 0.01 > beijing_ts.pla```
 
-These are example of compression ratios and execution time on a 2017 ultrabook (i7-7500U, 16GB RAM):
+Below are examples of compression ratios and execution time on a 2017 ultrabook (i7-7500U, 16GB RAM):
 
 | Dataset | Number of datapoints    | Size CSV input (bytes) | Datarange | Error (<0.0025% of datarange) | Size PLA (bytes) | Compression Ratio (versus CSV input) | Average Error    | Execution time compression (s) | Execution time decompression (s) | Datapoint / second (compression) |
 | :---: | :---:  | :---: | :---: | :---:  | :---: | :---:  | :---: | :---: | :---:  | :---:  |
