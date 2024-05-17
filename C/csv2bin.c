@@ -11,8 +11,6 @@
 
 #define VTYPE               float 
 
-/* Default decompress to csv output, uncomment the marked lines to decompress to binary */
-
 int main(int argc, char** argv){
     char sep = '\n';
     VTYPE value;
@@ -22,7 +20,7 @@ int main(int argc, char** argv){
     
     char pattern[3];
     pattern[0] = '%';
-    pattern[1] = 'f';   // long float type
+    pattern[1] = 'f';   // float type
     pattern[2] = sep;
 
     freopen(NULL, "wb", stdout);        // binary output

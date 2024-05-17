@@ -26,24 +26,25 @@
 #include <stdbool.h>
 
 #define VTYPE               float 
+#define N_TYPE              unsigned char
 
-/* Default decompress to csv output, uncomment the marked lines to decompress to binary */
+/* Default decompress to csv output, use the different modes to change the output */
+
+/* Usage: ./pla-decompress [mode]
+ * Modes: 
+    * 0,2      print text output (default), 
+    * 1,3      print binary ouput
+    * 2,3,4    print segments
+*/
 
 int main(int argc, char** argv){
-    unsigned char n;
+    N_TYPE n;
     VTYPE a, b, value;
     int x = 1;
-    bool print_segments = false;
     char mode = 0;
     
-    if(argc > 1){
+    if(argc > 1)
         mode = atoi(argv[1]);
-        /* Modes: 
-         * 0,2      print text output (default), 
-         * 1,3      print binary ouput
-         * 2,3,4    print segments
-         */
-    }
     
     freopen(NULL, "rb", stdin);             // takes input from standard input in binary format
     
@@ -59,7 +60,7 @@ int main(int argc, char** argv){
             if(mode == 0 || mode == 2)
                 printf("%f\n", a);
             if(mode == 1 || mode == 3)
-                fwrite(&a, sizeof(a), 1, stdout);               // uncomment for binary output
+                fwrite(&a, sizeof(a), 1, stdout);               
                 
             x++;
         } 
@@ -73,7 +74,7 @@ int main(int argc, char** argv){
                 if(mode == 0 || mode == 2)
                     printf("%f\n", value);
                 if(mode == 1 || mode == 3)
-                    fwrite(&value, sizeof(value), 1, stdout);   // uncomment for binary output
+                    fwrite(&value, sizeof(value), 1, stdout);  
                 x++;
             }
         }

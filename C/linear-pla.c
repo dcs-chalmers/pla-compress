@@ -24,7 +24,7 @@
 /* Documentation:
  * Single Stream Protocol associated with Linear PLA compression.
  * Timestamps are always logical in this implementation.
- * Default parameters: max segment size = 256 (1 byte encoding), a-b values as floats (4 bytes).
+ * Default parameters: max segment size = 255 (1 byte encoding), a-b values as floats (4 bytes).
  * Segments of length 1-2 are encoded as singleton(s).
  * The Convex-Hulls have a  max size of 256 points by default.
  */
@@ -187,9 +187,6 @@ int main(int argc, char** argv){
             // Update current best fit line
             a = newa;
             b = newb;
-            
-            if(n == 0)
-                printf("\n %d, %d, %f, %f \n",x,n,a,b);
         }
         
         // End of input stream (EOF or a NAN value was received) => flush current segment
